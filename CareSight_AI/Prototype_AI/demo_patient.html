@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CareSight AI - Demo</title>
+<style>
+:root {
+  --bg:#0f0f1e; --fg:#e0e0ff;
+  --panel-bg:#1a1a2e; --panel-fg:#e0e0ff;
+  --button-bg:#00f0ff; --button-fg:#000; --button-hover:#00cfff;
+  --border:#333; --input-bg:#1a1a2e; --input-fg:#e0e0ff;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: url('images/CareSightAI.png') no-repeat center center fixed;
+  color: var(--fg);
+  transition: 0.3s;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  border-bottom: 1px solid var(--border);
+}
+
+.header img {
+  height: 60px;
+}
+
+.header h1 {
+  margin: 0 20px;
+  font-size: 24px;
+  flex: 1;
+  color: #333;
+}
+
+
+.header h2 {
+  margin: 0 20px;
+  font-size: 14px;
+  flex: 1;
+  color: #333;
+}
+
+button#modeToggle {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 25px;
+  background: var(--button-bg);
+  color: var(--button-fg);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button#modeToggle:hover {
+  background: var(--button-hover);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 30px;
+  gap: 20px;
+}
+
+.instructions {
+  background: var(--panel-bg);
+  padding: 20px;
+  border-radius: 15px;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.demo-btn {
+  flex: 1 1 200px;
+  padding: 15px 20px;
+  background: var(--panel-bg);
+  border: 2px solid var(--button-bg);
+  border-radius: 12px;
+  cursor: pointer;
+  color: var(--fg);
+  transition: 0.3s;
+}
+
+.demo-btn:hover {
+  background: var(--button-bg);
+  color: var(--button-fg);
+}
+
+.demo-btn h3 {
+  margin: 0 0 5px 0;
+}
+
+.demo-btn p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--fg);
+}
+
+iframe#demoFrame {
+  width: 100%;
+  height: 600px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img src="images/CareSightAI.png" alt="CareSight AI Logo">
+  <h1>CareSight AI - Demo</h1>
+  <table><tr><td><h2>Powered by: </h2><img src= "images/vultr.png" alt="Powered by Vultr"></td><td>
+  <h2>Designed Using: </h2><img src="images/GoogleAI.png" alt="Designed using Google AI Studio"></td></tr></table>
+  <button id="modeToggle">Toggle Light Mode</button>
+</div>
+
+<div class="main">
+  <div class="instructions">
+    <strong>CareSight AI</strong> is an autonomous multimodal healthcare assistant that sees, listens, reads, and reasons across the patient journey to reduce administrative burden and improve clinical readiness.
+    <br><br>
+    <strong>Our Solution:</strong> <em>Perception → Reasoning → Action</em>
+    <ul>
+      <li>OCR & Vision perceive documents and images</li>
+      <li>Speech recognition listens to patient responses</li>
+      <li>LLM reasons across all inputs</li>
+      <li>Autonomously prepares clinical summaries</li>
+    </ul>
+    <br>
+    <strong>Demo Focus:</strong> <em>Patient Intake: Upload documents & images, record voice responses, OCR + CV + Speech → structured data</em>
+  </div>
+
+  <div class="buttons">
+    <div class="demo-btn" onclick="loadDemo('demo_patient_appointment.html')">
+      <h3>1. Appointment Check-In</h3>
+      <p>Select date, purpose of visit, doctor, and location using voice/speech to check-in.</p>
+    </div>
+    <div class="demo-btn" onclick="loadDemo('demo_patient_dl.html')">
+      <h3>2. Enter License Info</h3>
+      <p>Provide patient information including driver license details, showcase OCR.</p>
+    </div>
+    <div class="demo-btn" onclick="loadDemo('demo_patient_icard.html')">
+      <h3>3. Upload Insurance Card</h3>
+      <p>Upload front and back of insurance card for OCR processing.</p>
+    </div>
+    <div class="demo-btn" onclick="loadDemo('demo_patient_prescriptions.html')">
+      <h3>4. Update Prescriptions</h3>
+      <p>Add or update patient prescriptions to complete intake using Computer Vision and OCR.</p>
+    </div>
+    <div class="demo-btn" onclick="window.open('demo_Cognitive_Multi_Modal_Interaction.html', 'transcribe')">
+      <h3>A. Try the AI Transcriber </h3>
+      <p>Experience robotic-like transcription with voice and lip-syncing.</p>
+    </div>
+    <div class="demo-btn" onclick="window.open('demo_skin_risk.html', 'skin')">
+      <h3>B. Analyze Skin Lesion Risk </h3>
+      <p>Simulating Skin Benign/Malignant AI/ML model. Upload a skin lesion image to simulate AI-driven analysis for benign vs. malignant risk. See how AI can help detect potential skin issues.</p>
+    </div>
+    <div class="demo-btn" onclick="window.open('demo_stroke_risk.html', 'stroke')">
+      <h3>C. Check your Stroke Risk </h3>
+      <p>Simulate a health assessment by answering 10 bio questions—powered by voice and LLM—to determine your stroke risk.</p>
+    </div>
+  </div>
+
+  <iframe id="demoFrame" src=""></iframe>
+</div>
+
+<script>
+// Dark/Light Mode toggle
+const modeToggle = document.getElementById('modeToggle');
+modeToggle.onclick = () => {
+  document.body.classList.toggle('light-mode');
+  if(document.body.classList.contains('light-mode')) {
+    document.documentElement.style.setProperty('--bg','#f4f4f4');
+    document.documentElement.style.setProperty('--fg','#111');
+    document.documentElement.style.setProperty('--panel-bg','#fff');
+    document.documentElement.style.setProperty('--panel-fg','#000000');
+    document.documentElement.style.setProperty('--button-bg','#00f0ff');
+    document.documentElement.style.setProperty('--button-fg','#000');
+    document.documentElement.style.setProperty('--button-hover','#00cfff');
+    modeToggle.textContent='Toggle Dark Mode';
+  } else {
+    document.documentElement.style.setProperty('--bg','#0f0f1e');
+    document.documentElement.style.setProperty('--fg','#e0e0ff');
+    document.documentElement.style.setProperty('--panel-bg','#1a1a2e');
+    document.documentElement.style.setProperty('--panel-fg','#e0e0ff');
+    document.documentElement.style.setProperty('--button-bg','#00f0ff');
+    document.documentElement.style.setProperty('--button-fg','#000');
+    document.documentElement.style.setProperty('--button-hover','#00cfff');
+    modeToggle.textContent='Toggle Light Mode';
+  }
+}
+
+// Load page into iframe
+function loadDemo(url){
+  document.getElementById('demoFrame').src = url;
+}
+</script>
+
+</body>
+</html>

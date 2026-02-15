@@ -1,0 +1,29 @@
+<script>
+async function upgradeToHttps() {
+    const httpUrl = "http://abc.com/";
+    const httpsUrl = "https://abc.com/";
+
+    // 1. Check if the user is currently on the insecure version
+    if (window.location.href === httpUrl) {
+        try {
+            // 2. Attempt to 'ping' the HTTPS version
+            // We use 'no-cors' so the browser doesn't block the check 
+            // even if the server doesn't have CORS headers set up yet.
+            await fetch(httpsUrl, { 
+                mode: 'no-cors',
+                cache: 'no-cache',
+                method: 'HEAD' // HEAD is faster as it doesn't download the body
+            });
+
+            // 3. If the fetch doesn't throw an error, redirect
+            console.log("HTTPS is available. Redirecting...");
+            window.location.replace(httpsUrl); 
+        } catch (error) {
+            console.log("HTTPS fetch failed. Staying on HTTP for now.", error);
+        }
+    }
+}
+
+upgradeToHttps();
+
+</script>
