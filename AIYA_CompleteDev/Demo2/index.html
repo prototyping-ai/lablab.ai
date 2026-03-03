@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D-ID Avatar + Mic Demo</title>
+  <style>
+    :root {
+      --bg: #05050a;
+      --fg: #e0e0ff;
+      --panel-bg: #1a1a2e;
+      --panel-fg: #e0e0ff;
+      --button-bg: #00f0ff;
+      --button-fg: #000;
+      --button-hover: #00cfff;
+      --border: #333;
+      --accent: #00f0ff;
+      --bubble-bg: #222244;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.4);
+      font-family: monospace;
+      letter-spacing: 1px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.2em;
+    }
+
+    #timestamp {
+      font-family: monospace;
+    }
+
+    /* VIDEO + WEBCAM CONTAINER */
+    #video-container {
+      display: flex;
+      gap: 10px;
+      padding: 15px;
+      flex: 1;
+      min-height: 300px;
+    }
+
+    #webcamVideo {
+      width: 40%;
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    #video-wrapper {
+      width: 60%;
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    #streamVideoElement,
+    #idleVideoElement {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top:0; left:0;
+    }
+
+    #idleVideoElement {
+      opacity: 0;
+    }
+
+    /* CHAT + CONTROLS */
+    #buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 0;
+    }
+
+    #buttons input[type="radio"] {
+      display: none;
+    }
+
+    #buttons label {
+      padding: 5px 15px;
+      border-radius: 20px;
+      background: var(--panel-bg);
+      color: var(--fg);
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    #buttons input[type="radio"]:checked + label {
+      background: var(--accent);
+      color: var(--button-fg);
+    }
+
+    .inputsDiv {
+      display: flex;
+      padding: 0 15px;
+      gap: 10px;
+    }
+
+    #textArea {
+      flex: 1;
+      min-height: 60px;
+      background: var(--bubble-bg);
+      color: var(--fg);
+      border-radius: 8px;
+      padding: 10px;
+      resize: none;
+      font-family: monospace;
+    }
+
+    .roundButton {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 25px;
+      background-color: var(--button-bg);
+      color: var(--button-fg);
+      cursor: pointer;
+    }
+
+    #answers {
+      padding: 15px;
+    }
+
+    #answersContent {
+      max-height: 200px;
+      overflow-y: auto;
+      background: rgba(0,0,0,0.3);
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 240, 255, 0.1);
+    }
+
+    .agentMessage {
+      border-radius: 0 16px 16px;
+      border: 1px solid var(--border);
+      margin-right: auto;
+      padding: 5px 10px;
+      margin-bottom: 5px;
+      max-width: 75%;
+    }
+
+    .userMessage {
+      border-radius: 16px 0 16px 16px;
+      background: #333366;
+      padding: 5px 10px;
+      margin-left: auto;
+      max-width: 75%;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>D-ID Avatar + Mic Demo</h1>
+    <span id="previewName">Agent</span> - 
+    <span id="connectionLabel">Connecting...</span>
+    <span id="timestamp">00:00:00</span>
+  </header>
+
+  <!-- Video + Webcam -->
+  <div id="video-container">
+    <!-- Webcam -->
+    <video id="webcamVideo" autoplay playsinline muted></video>
+
+    <!-- D-ID Avatar -->
+    <div id="video-wrapper">
+      <video id="streamVideoElement" autoplay playsinline></video>
+      <video id="idleVideoElement" autoplay loop></video>
+    </div>
+  </div>
+
+  <!-- Chat options -->
+  <div id="buttons">
+    <input type="radio" id="chatOption" name="option" value="chat" checked>
+    <label for="chatOption">Chat</label>
+    <input type="radio" id="speakOption" name="option" value="speak">
+    <label for="speakOption">Speak</label>
+  </div>
+
+  <!-- Text input + buttons -->
+  <div class="inputsDiv">
+    <textarea id="textArea" placeholder="Type or speak..." autofocus></textarea>
+    <button id="speechButton" class="roundButton" title="Toggle Mic">Mic</button>
+    <button id="actionButton" class="roundButton" title="Send Message">Send</button>
+    <button id="interruptButton" class="roundButton" title="Interrupt" style="display:none;">Stop</button>
+  </div>
+
+  <!-- Conversation Log -->
+  <details id="answers">
+    <summary>Conversation Log</summary>
+    <div id="answersContent"></div>
+  </details>
+
+  <!-- Scripts -->
+  <script type="module" src="main.js"></script>
+  <script src="webSpeechAPI.js"></script>
+
+  <!-- Webcam initialization -->
+  <script>
+    async function startWebcam() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        const webcamVideo = document.getElementById('webcamVideo');
+        webcamVideo.srcObject = stream;
+        webcamVideo.play();
+      } catch(err) {
+        console.error("Webcam access denied:", err);
+      }
+    }
+
+    window.addEventListener('load', startWebcam);
+
+    // Timestamp
+    setInterval(() => {
+      const now = new Date();
+      document.getElementById('timestamp').innerText =
+        now.getHours().toString().padStart(2,'0') + ":" +
+        now.getMinutes().toString().padStart(2,'0') + ":" +
+        now.getSeconds().toString().padStart(2,'0');
+    }, 1000);
+
+    // Auto-scroll conversation log
+    const logBox = document.getElementById('answersContent');
+    const observer = new MutationObserver(() => {
+      logBox.scrollTop = logBox.scrollHeight;
+    });
+    observer.observe(logBox, { childList: true });
+  </script>
+</body>
+</html>
