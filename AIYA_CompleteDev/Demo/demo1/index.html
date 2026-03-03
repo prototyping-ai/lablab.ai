@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIYA: Real-Time Avatar Agent</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="header">
+    <div>AIYA SYSTEM STATUS: <span class="status">ONLINE</span></div>
+    <div id="timestamp">00:00:00</div>
+  </div>
+
+  <div class="main">
+    <!-- Camera feed -->
+    <div class="video-container">
+      <video id="video" autoplay playsinline muted></video>
+      <div class="hud" id="speakerLabel">Listening...</div>
+    </div>
+
+    <!-- Conversation log -->
+    <div class="sidebar">
+      <div class="panel">
+        <h3>Conversation Log</h3>
+        <div class="conversation-log" id="conversationLog"></div>
+      </div>
+      <div class="panel">
+        <button id="sendBtn" class="field-btn">Ask "What do you see?"</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D-ID Embed -->
+  <script type="module"
+      src="https://agent.d-id.com/v2/index.js"
+      data-mode="fabio"
+      data-client-key="Z29vZ2xlLW9hdXRoMnwxMDcyMDgyMTI2MDEwNTk4MzQ2NDQ6UDVJYUtPQXhNaXdDMFQ1RDhGRmds"
+      data-agent-id="v2_agt_usa6DLuf"
+      data-name="did-agent"
+      data-monitor="true"
+      data-orientation="horizontal"
+      data-position="right">
+  </script>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

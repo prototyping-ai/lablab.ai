@@ -1,0 +1,91 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #000;
+  color: #e0e0ff;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #333;
+}
+
+.field-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  background: #00f0ff;
+  color: #000;
+  cursor: pointer;
+}
+
+.field-btn:hover { background: #00cfff; }
+
+.main {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
+
+.video-container {
+  flex: 1;
+  background: #000;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+
+canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+}
+
+.hud {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(0,240,255,0.3);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.confidence-bar {
+  position: absolute;
+  bottom: 10px;
+  left: 140px;
+  width: 100px;
+  height: 10px;
+  background: #333;
+  border: 1px solid #00f0ff;
+}
+
+.confidence-fill {
+  width: 0%;
+  height: 100%;
+  background: #00f0ff;
+  transition: width 0.1s;
+}
+
+#avatarContainer.pulse {
+  box-shadow: 0 0 20px 5px rgba(0, 240, 255, 0.8);
+  transition: box-shadow 0.3s ease-in-out;
+}
